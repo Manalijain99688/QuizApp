@@ -35,11 +35,9 @@
                 <h4 id="changePlayerName">Player</h4>
             </div>
             <div class="col">
-                <h4 id="time" class="text-center">00:00</h4>
+                <h4 id="time" class="text-center">05:00</h4>
             </div>
-            <div class="col">
-                <h4 id="points" class="float-end">Points: 0</h4>
-            </div>
+            
         </div>
         <hr>
         <div class="row">
@@ -49,16 +47,16 @@
         </div>
         <div class="row row-cols-2 mt-4">
             <div class="col">
-                <input type="button" value="a" id="a" class="opt btn btn-dark w-100 mt-4">
+                <input type="button" value="a" id="A" class="opt btn btn-dark w-100 mt-4">
             </div>
             <div class="col">
-                <input type="button" value="b" id="b" class="opt btn btn-dark w-100 mt-4">
+                <input type="button" value="b" id="B" class="opt btn btn-dark w-100 mt-4">
             </div>
             <div class="col">
-                <input type="button" value="c" id="c" class="opt btn btn-dark w-100 mt-4">
+                <input type="button" value="c" id="C" class="opt btn btn-dark w-100 mt-4">
             </div>
             <div class="col">
-                <input type="button" value="d" id="d" class="opt btn btn-dark w-100 mt-4">
+                <input type="button" value="d" id="D" class="opt btn btn-dark w-100 mt-4">
             </div>
         </div>
         <hr class="mt-5">
@@ -82,13 +80,18 @@
     </div>
     <!-- ============================Restart Quiz Box===================== -->
     <div id="restartQuiz" class="bg-light p-5 shadow mb-5  ">
-        <h3 id="finalPoints" class="text-center">Final Points: 0</h3>
+        
         <h4 id="percentage" class="test-center  ">Result : Pass/Fail</h4>
+        <h4 id="correct" class="test-center  ">Correct: 0</h4>
+        <h4 id="incorrect" class="test-center  ">Incorrect:0</h4>
         <input type="button" value="Restart Quiz" id="restartQuizBtn" class="btn btn-dark m-auto d-block mt-3">
+        <br>
+        <div id="quiz-summary" class="question"></div>
     </div>
 </body>
 <srcipt src="jquery-3.6.4.min.js"></srcipt>
 
 <script src="quiz.js"></script>
+
 
 </html>

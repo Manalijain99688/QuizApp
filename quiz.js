@@ -1,51 +1,56 @@
-
-// ================================Questions========================
-var questions = [
+let questions = [
     {
-        q: "Who is the father of Computer",
-        a: "Mark",
-        b: "Charles Babbage",
-        c: "James",
-        d: "Shaun",
-        ans: "b",
+        q: "Who is the father of Computer ?",
+        A: "Mark",
+        B: "Charles Babbage",
+        C: "James",
+        D: "Shaun",
+        ans: "B",
         opt1: "a",
-        opt2: "c"
+        opt2: "c",
+        uans: null,
+        preans: null
     },
     {
-        q: "Who is the father of Nation",
-        a: "Gandhi Ji",
-        b: "Raju Ji",
-        c: "Ravi Ji",
-        d: "Ajay Ji",
-        ans: "a",
+        q: "Who is the father of Nation ?",
+        A: "Gandhi Ji",
+        B: "Raju Ji",
+        C: "Ravi Ji",
+        D: "Ajay Ji",
+        ans: "A",
         opt1: "b",
-        opt2: "d"
+        opt2: "d",
+        uans: null
     },
     {
-        q: "Full form of ATM",
-        a: "Any Time Money",
-        b: "all time Masti",
-        c: "All the Monkeys",
-        d: "Automated Teller Machine",
-        ans: "d",
+        q: "Full form of ATM ?",
+        A: "Any Time Money",
+        B: "all time Masti",
+        C: "All the Monkeys",
+        D: "Automated Teller Machine",
+        ans: "D",
         opt1: "a",
-        opt2: "b"
+        opt2: "b",
+        uans: null
     },
     {
         q: "What is the largest mammal in the world?",
-        a: "Elephant",
-        b: "Giraffe",
-        c: "Whale",
-        d: "Hippopotamus",
-        ans: "b"
+        A: "Elephant",
+        B: "Giraffe",
+        C: "Whale",
+        D: "Hippopotamus",
+        ans: "B",
+        uans: null
     },
     {
         q: "From where the sun rises ?",
-        a: "East",
-        b: "West",
-        c: "North",
-        d: "South",
-        ans: "a"
+        A: "East",
+        B: "West",
+        C: "North",
+        D: "South",
+        ans: "A",
+        uans: null
+
     },
 ];
 
@@ -58,8 +63,11 @@ let cid = "";
 let points = 0;
 let len = questions.length;
 let percentage = 60;
+let correct = 0;
+let incorrect = 0;
+let quizhtml = '';
 
-// ================================Strart Quiz Button========================
+// ================================Start Quiz Button========================
 $("#startQuizBtn").click(function () {
     pname = $("#playerName").val();
     $("#startQuiz").hide();
@@ -68,81 +76,103 @@ $("#startQuizBtn").click(function () {
         $("#changePlayerName").text(pname);
     }
     loadQuestion();
+    updateBtn();
     startTime();
 });
+
 // ================================loadQuestion Function========================
 function loadQuestion() {
     $("#q").text(questions[count].q);
-    $("#a").val(questions[count].a);
-    $("#b").val(questions[count].b);
-    $("#c").val(questions[count].c);
-    $("#d").val(questions[count].d);
+    $("#A").val(questions[count].A);
+    $("#B").val(questions[count].B);
+    $("#C").val(questions[count].C);
+    $("#D").val(questions[count].D);
     $("#questionNo").text(`Question No. ${count + 1}/${len}`);
+    $(".opt").css("background", "");
+    if (questions[count].uans != null) {
+        $("#" + questions[count].uans).css("background", "red");
+        $("#" + questions[count].ans).css("background", "green");
+    }
+
 }
 // ================================validation===============
 $(".opt").click(function () {
     cid = $(this).attr("id");
+    questions[count].uans = cid;
     if (cid == questions[count].ans) {
         $(this).css("background", "green");
         points++;
+        correct++;
+
         $("#points").text(`Points: ${points}`);
     } else {
+        incorrect++;
         $(this).css("background", "red");
         $("#" + questions[count].ans).css("background", "green");
     }
-    $(".opt").prop("disabled", "true");
-    if (count + 1 == 1) {
-        $("#nextQuestion").show();
-        $("#preQuestion").hide();
-        $("#submitQuestion").hide();
-    }
-    else if (count + 1 == 5) {
-        $("#nextQuestion").hide();
-        $("#preQuestion").show();
-        $("#submitQuestion").show();
-    }
-    else {
-        $("#nextQuestion").show();
-        $("#preQuestion").show();
-        $("#submitQuestion").hide();
-    }
+    
+
 });
 // ================================ Previous Button===============
-$("#preQuestion").click(function () {
-    count--;
-    $(".opt").css("background", "");
-    $(".opt").prop("disabled", "");
-    loadQuestion();
+$("#preQuestion").click(() => {
+    if (count > 0) {
+        count--;
+        loadQuestion();
+        updateBtn();
+        // Do not update correct and incorrect variables
+    }
 });
 
 // ================================Next Button===============
-$("#nextQuestion").click(function () {
+$("#nextQuestion").click(() => {
     count++;
+    loadQuestion();
     $(".opt").css("background", "");
     $(".opt").prop("disabled", "");
-    loadQuestion();
+    updateBtn();
 });
 //===============================submit button=================
-$("#submitQuestion").click(function () {
+$("#submitQuestion").click(() => {
+
     $("#restartQuiz").show();
     $("#finalPoints").text(`Final Points: ${points}`);
     let result = (percentage / 100) * points;
-    if (result >= 3) {
+    if (result > 2) {
         $("#percentage").text(`Result: Pass`);
+        $("#correct").text(`Correct :${correct}`);
+        $("#incorrect").text(`incorrect :${incorrect}`);
+
     }
     else {
         $("#percentage").text(`Result: Fail`);
+        $("#correct").text(`Correct :${correct}`);
+        $("#incorrect").text(`incorrect :${incorrect}`);
     }
     $("#quizBox").hide();
-}
-);
+    quizHtml = '';
+    for (let i = 0; i < len; i++) {
+        quizHtml += `<div class="question"> Question : ${i + 1} ${questions[i].q}</div>
+    <div class="opt">
+    <label>Correct: ${questions[i].ans}<br>
+    <label>Your Answer :${questions[i].uans}<br>
+    </div>`;
+    }
+
+    $('#quiz-summary').html(quizHtml);
+
+
+
+});
 // ================================Restart quiz Button===============
-$("#restartQuizBtn").click(function () {
-    $("#quizBox").hide();
+$("#restartQuizBtn").click(() => {
+    $("#quizBox").show();
     $("#restartQuiz").hide();
     resetQuiz();
     loadQuestion();
+    $(".opt").css("background", "");
+    $(".opt").prop("disabled", "");
     startTime();
+
 });
 // ===========================Reset Quiz ==============
 function resetQuiz() {
@@ -150,8 +180,8 @@ function resetQuiz() {
     points = 0;
     clearInterval(quiztime);
     $("#time").text("05:00");
-    $("#points").text(`Points: 0`);
     $("#questionNo").text(`Question No. ${count + 1}/${len}`);
+   
 }
 // =========================Timer=========================
 // ===========Variables=======
@@ -161,26 +191,39 @@ let remainingmins = 0;
 let remainingsecs = 0;
 let quiztime = "";
 // ============= start time function===============
-function startTime() {
-    totalmins = 5;
-    convertedtosecs = 60 * totalmins;
-    function timer() {
-        convertedtosecs--;
-        remainingmins = Math.floor(convertedtosecs / 60);
-        remainingsecs = convertedtosecs % 60;
-        if (remainingmins <= 9 && remainingmins >= 0) {
-            remainingmins = "0" + remainingmins;
-        }
-        if (remainingsecs <= 9 && remainingsecs >= 0) {
-            remainingsecs = "0" + remainingsecs;
-        }
-        $("#time").text(`${remainingmins}:${remainingsecs}`);
-        if (convertedtosecs == 0) {
-            clearInterval(quiztime);
-            $("#quizBox").hide();
-            $("#restartQuiz").show();
-        }
+const startTime = () => {
+totalmins = 5;
+convertedtosecs = 60 * totalmins;
+const timer = () => {
+convertedtosecs--;
+remainingmins = Math.floor(convertedtosecs / 60);
+remainingsecs = convertedtosecs % 60;
+if (remainingmins <= 9 && remainingmins >= 0) {
+remainingmins = "0" + remainingmins;
+}
+if (remainingsecs <= 9 && remainingsecs >= 0) {
+remainingsecs = "0" + remainingsecs;
+}
+$("#time").text(`${remainingmins}:${remainingsecs}`);
+if (convertedtosecs == 0) {
+clearInterval(quiztime);
+$("#quizBox").hide();
+$("#restartQuiz").show();
+}
+}
+quiztime = setInterval(timer, 100);
+};
+
+let updateBtn = () => {
+    if (count > 0) {
+        $("#preQuestion").show();
     }
-    quiztime = setInterval(timer, 100);
+    else if(count==4){
+        $("#preQuestion").show();
+          
+    } 
+    else {
+        $("#preQuestion").hide();
+    }
 }
 
